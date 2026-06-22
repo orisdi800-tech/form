@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>نموذج تواصل احترافي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#2563EB;
+  --primary-dark:#1D4ED8;
+  --primary-light:#60A5FA;
+  --primary-bg:#EFF6FF;
+  --ink:#0F172A;
+  --ink2:#1E293B;
+  --ink3:#475569;
+  --surf:#FFFFFF;
+  --surf2:#F8FAFC;
+  --surf3:#F1F5F9;
+  --line:#CBD5E1;
+  --shadow:0 4px 24px rgba(0,0,0,0.06);
+  --radius:12px;
+  --transition:0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Cairo',sans-serif;
+  background:var(--surf2);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.shell{
+  display:grid;
+  grid-template-columns:380px 1fr;
+  max-width:1060px;
+  width:100%;
+  background:var(--surf);
+  border-radius:var(--radius);
+  box-shadow:0 20px 60px rgba(0,0,0,0.08);
+  overflow:hidden;
+}
+
+/* ========== LEFT PANEL ========== */
+.panel-l{
+  background:linear-gradient(145deg, #0F172A 0%, #1E293B 100%);
+  padding:32px 28px;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+.video-wrap{
+  position:relative;
+  width:100%;
+  padding-bottom:56.25%;
+  background:#0A0F1A;
+  border-radius:var(--radius);
+  overflow:hidden;
+  margin-bottom:24px;
+  cursor:pointer;
+}
+.video-wrap video{
+  position:absolute;
+  top:0;left:0;width:100%;height:100%;
+  object-fit:cover;
+}
+.video-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,0.35);
+  transition:background var(--transition);
+  border-radius:var(--radius);
+}
+.video-overlay:hover{background:rgba(0,0,0,0.2)}
+.play-btn{
+  width:64px;height:64px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.92);
+  border:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:transform var(--transition), background var(--transition);
+  box-shadow:0 4px 24px rgba(0,0,0,0.3);
+  backdrop-filter:blur(4px);
+}
+.play-btn:hover{transform:scale(1.08);background:#fff}
+.play-btn i{font-size:26px;color:#0F172A;margin-left:4px}
+.video-progress{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:3px;
+  background:rgba(255,255,255,0.25);
+}
+.video-progress-bar{
+  height:100%;
+  background:var(--primary);
+  width:0%;
+  transition:width 0.1s linear;
+}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.brand-icon{
+  width:44px;height:44px;
+  border-radius:var(--radius);
+  background:var(--primary);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.brand-icon i{font-size:20px;color:#fff}
+.brand-name{font-size:15px;font-weight:700;color:#fff}
+.brand-tagline{font-size:11px;color:rgba(255,255,255,0.35);margin-top:1px}
+.l-title{font-size:24px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:6px}
+.l-title em{font-style:normal;color:var(--primary-light)}
+.l-desc{font-size:13px;color:rgba(255,255,255,0.4);line-height:1.8;margin-bottom:18px}
+.contact-list{display:flex;flex-direction:column;gap:10px;margin-bottom:auto}
+.contact-item{
+  display:flex;align-items:center;gap:14px;
+  padding:10px 14px;
+  background:rgba(255,255,255,0.04);
+  border-radius:var(--radius);
+  border-right:3px solid var(--primary);
+  transition:background var(--transition);
+}
+.contact-item:hover{background:rgba(255,255,255,0.07)}
+.contact-icon{
+  width:38px;height:38px;
+  border-radius:var(--radius);
+  background:rgba(37,99,235,0.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.contact-icon i{font-size:16px;color:var(--primary-light)}
+.contact-label{font-size:9px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.6px}
+.contact-value{font-size:13px;color:#fff;font-weight:600}
+.social-row{display:flex;gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06)}
+.soc-btn{
+  width:36px;height:36px;
+  border-radius:var(--radius);
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.06);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:all var(--transition);
+  color:rgba(255,255,255,0.4);
+  font-size:14px;
+  text-decoration:none;
+}
+.soc-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.l-copy{font-size:10px;color:rgba(255,255,255,0.15);margin-top:10px}
+
+/* Mobile contact strip - visible only on mobile */
+.mob-strip{
+  display:none;
+  gap:10px;
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  flex-wrap:wrap;
+}
+.mob-strip-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 12px;
+  background:rgba(255,255,255,0.04);
+  border-radius:8px;
+}
+.mob-strip-item i{font-size:13px;color:var(--primary-light)}
+.mob-strip-item span{font-size:12px;color:rgba(255,255,255,0.7);font-weight:500}
+
+/* ========== RIGHT PANEL ========== */
+.panel-r{
+  background:var(--surf);
+  padding:32px 34px;
+  display:flex;
+  flex-direction:column;
+}
+.r-title{font-size:22px;font-weight:900;color:var(--ink);margin-bottom:4px}
+.r-sub{font-size:14px;color:var(--ink3);margin-bottom:18px}
+.divider{height:1px;background:var(--line);margin-bottom:22px}
+
+/* Modern Inputs */
+.field-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-bottom:14px;
+}
+.field-grid.full{grid-template-columns:1fr}
+.fgrp{display:flex;flex-direction:column;gap:6px}
+.flbl{
+  font-size:13px;
+  font-weight:700;
+  color:var(--ink);
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.req{color:#EF4444;font-size:16px}
+.finput{
+  width:100%;
+  padding:12px 16px;
+  background:var(--surf2);
+  border:2px solid var(--line);
+  border-radius:var(--radius);
+  font-size:14px;
+  color:var(--ink);
+  font-family:'Cairo',sans-serif;
+  outline:none;
+  transition:border-color var(--transition), background var(--transition), box-shadow var(--transition);
+}
+.finput:hover{border-color:#94A3B8}
+.finput:focus{
+  border-color:var(--primary);
+  background:var(--surf);
+  box-shadow:0 0 0 4px rgba(37,99,235,0.08);
+}
+.finput.err{border-color:#EF4444;background:#FEF2F2}
+.finput::placeholder{color:var(--ink3);font-size:13px}
+textarea.finput{resize:vertical;min-height:100px;line-height:1.7}
+.field-hint{font-size:11px;color:var(--ink3);margin-top:2px}
+.field-err-msg{font-size:11px;color:#EF4444;margin-top:2px;display:none}
+.fgrp.has-err .field-err-msg{display:block}
+.fgrp.has-err .field-hint{display:none}
+
+/* Modern Select */
+.select-wrap{
+  position:relative;
+  width:100%;
+}
+.select-wrap select{
+  width:100%;
+  padding:12px 16px;
+  background:var(--surf2);
+  border:2px solid var(--line);
+  border-radius:var(--radius);
+  font-size:14px;
+  color:var(--ink);
+  font-family:'Cairo',sans-serif;
+  outline:none;
+  cursor:pointer;
+  -webkit-appearance:none;
+  appearance:none;
+  transition:border-color var(--transition), background var(--transition), box-shadow var(--transition);
+}
+.select-wrap select:hover{border-color:#94A3B8;background:var(--surf)}
+.select-wrap select:focus{
+  border-color:var(--primary);
+  background:var(--surf);
+  box-shadow:0 0 0 4px rgba(37,99,235,0.08);
+}
+.select-wrap select option{padding:10px 14px}
+.select-wrap select optgroup{font-weight:700;color:var(--ink)}
+.select-wrap::after{
+  content:'\f0d7';
+  font-family:'Font Awesome 6 Free';
+  font-weight:900;
+  position:absolute;
+  left:14px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--ink3);
+  font-size:14px;
+  pointer-events:none;
+  transition:transform var(--transition);
+}
+.select-wrap select:focus + ::after{transform:translateY(-50%) rotate(180deg)}
+
+/* Send Button - Modern Gradient */
+.btn-send{
+  width:100%;
+  padding:15px 24px;
+  background:linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+  color:#fff;
+  border:none;
+  border-radius:var(--radius);
+  font-size:15px;
+  font-weight:700;
+  font-family:'Cairo',sans-serif;
+  cursor:pointer;
+  transition:transform 0.15s, box-shadow 0.3s, opacity 0.3s;
+  margin-top:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  position:relative;
+  overflow:hidden;
+}
+.btn-send::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+  pointer-events:none;
+}
+.btn-send:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 30px rgba(37,99,235,0.35);
+}
+.btn-send:active{
+  transform:scale(0.97);
+  box-shadow:0 4px 16px rgba(37,99,235,0.25);
+}
+.btn-send:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.btn-send i{font-size:16px}
+.spinner{
+  display:inline-block;
+  width:18px;height:18px;
+  border:2.5px solid rgba(255,255,255,0.25);
+  border-top-color:#fff;
+  border-radius:50%;
+  animation:spin 0.6s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.privacy{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  justify-content:center;
+  font-size:11px;
+  color:var(--ink3);
+  margin-top:12px;
+}
+.privacy i{font-size:13px;color:var(--ink3)}
+
+.done{
+  display:none;
+  flex:1;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+  padding:24px 0;
+}
+.done-ring{
+  width:68px;height:68px;
+  border-radius:50%;
+  border:3px solid #22C55E;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 16px;
+}
+.done-ring i{font-size:30px;color:#22C55E}
+.done-title{font-size:20px;font-weight:900;color:var(--ink)}
+.done-sub{font-size:13px;color:var(--ink3);line-height:1.7;max-width:280px}
+
+/* ========== RESPONSIVE ========== */
+@media(max-width:820px){
+  body{padding:12px}
+  .shell{grid-template-columns:1fr;border-radius:var(--radius)}
+  .panel-l{
+    padding:20px 18px;
+    border-radius:var(--radius) var(--radius) 0 0;
+  }
+  .panel-l .brand{margin-bottom:10px}
+  .panel-l .l-title{font-size:20px}
+  .panel-l .l-desc,.panel-l .contact-list,.panel-l .social-row,.panel-l .l-copy{display:none}
+  .panel-l .mob-strip{display:flex}
+  .panel-r{
+    padding:18px 16px 24px;
+    border-radius:0 0 var(--radius) var(--radius);
+  }
+  .video-wrap{margin-bottom:14px}
+  .video-wrap .play-btn{width:52px;height:52px}
+  .video-wrap .play-btn i{font-size:20px}
+  .r-title{font-size:19px}
+  .r-sub{font-size:13px;margin-bottom:12px}
+  .divider{margin-bottom:16px}
+  .field-grid{grid-template-columns:1fr;gap:12px}
+  .flbl{font-size:13px}
+  .finput{font-size:15px;padding:13px 14px}
+  .finput::placeholder{font-size:14px}
+  textarea.finput{min-height:90px}
+  .btn-send{
+    font-size:14px;
+    padding:14px 18px;
+    margin-top:16px;
+    position:sticky;
+    bottom:8px;
+    box-shadow:0 4px 24px rgba(37,99,235,0.25);
+  }
+  .privacy{font-size:10px;margin-top:10px}
+}
+
+@media(max-width:480px){
+  body{padding:8px}
+  .panel-l{padding:14px 12px}
+  .panel-r{padding:14px 12px 18px}
+  .brand-icon{width:38px;height:38px}
+  .brand-icon i{font-size:17px}
+  .brand-name{font-size:13px}
+  .l-title{font-size:18px}
+  .video-wrap .play-btn{width:44px;height:44px}
+  .video-wrap .play-btn i{font-size:17px}
+  .mob-strip-item{padding:4px 10px}
+  .mob-strip-item i{font-size:12px}
+  .mob-strip-item span{font-size:11px}
+  .finput{font-size:16px;padding:14px 14px}
+  .btn-send{font-size:14px;padding:16px 16px;min-height:50px}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- LEFT PANEL -->
+  <div class="panel-l">
+    <!-- Video -->
+    <div class="video-wrap" id="videoWrap">
+      <video id="promoVideo" preload="metadata" playsinline>
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+      </video>
+      <div class="video-overlay" id="videoOverlay">
+        <button class="play-btn" id="playBtn" aria-label="تشغيل الفيديو">
+          <i class="fas fa-play"></i>
+        </button>
+      </div>
+      <div class="video-progress"><div class="video-progress-bar" id="videoProgress"></div></div>
+    </div>
+
+    <div class="brand">
+      <div class="brand-icon"><i class="fas fa-bolt"></i></div>
+      <div>
+        <div class="brand-name">Nexus Studio</div>
+        <div class="brand-tagline">حلول إبداعية</div>
+      </div>
+    </div>
+
+    <h1 class="l-title">دعنا نسمع <em>فكرتك</em></h1>
+    <p class="l-desc">كل مشروع عظيم يبدأ بمحادثة. شاركنا تفاصيلك وسنرد خلال 24 ساعة.</p>
+
+    <div class="contact-list">
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+        <div>
+          <div class="contact-label">البريد الإلكتروني</div>
+          <div class="contact-value">hello@nexus.com</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+        <div>
+          <div class="contact-label">رقم الهاتف</div>
+          <div class="contact-value">+964 770 000 0000</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fas fa-location-dot"></i></div>
+        <div>
+          <div class="contact-label">الموقع</div>
+          <div class="contact-value">بغداد، العراق</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="social-row">
+      <a href="#" class="soc-btn"><i class="fab fa-x-twitter"></i></a>
+      <a href="#" class="soc-btn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="#" class="soc-btn"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="soc-btn"><i class="fab fa-youtube"></i></a>
+    </div>
+    <div class="l-copy">© 2025 Nexus Studio</div>
+
+    <!-- Mobile contact strip -->
+    <div class="mob-strip">
+      <div class="mob-strip-item">
+        <i class="fas fa-envelope"></i>
+        <span>hello@nexus.com</span>
+      </div>
+      <div class="mob-strip-item">
+        <i class="fas fa-phone-alt"></i>
+        <span>+964 770 000 0000</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel-r">
+    <div id="formArea" style="display:flex;flex-direction:column;flex:1">
+      <h2 class="r-title">أرسل رسالتك</h2>
+      <p class="r-sub">املأ البيانات وسنتواصل معك قريباً</p>
+      <div class="divider"></div>
+
+      <div class="field-grid">
+        <div class="fgrp" id="grpName">
+          <label class="flbl" for="fName">الاسم الكامل <span class="req">*</span></label>
+          <input class="finput" type="text" id="fName" placeholder="أدخل اسمك" autocomplete="name">
+          <span class="field-err-msg">الاسم مطلوب</span>
+        </div>
+        <div class="fgrp">
+          <label class="flbl" for="fPhone">رقم الهاتف</label>
+          <input class="finput" type="tel" id="fPhone" placeholder="+964 …" autocomplete="tel">
+          <span class="field-hint">اختياري</span>
+        </div>
+      </div>
+
+      <div class="field-grid full">
+        <div class="fgrp" id="grpEmail">
+          <label class="flbl" for="fEmail">البريد الإلكتروني <span class="req">*</span></label>
+          <input class="finput" type="email" id="fEmail" placeholder="example@domain.com" autocomplete="email">
+          <span class="field-err-msg">بريد إلكتروني صحيح مطلوب</span>
+        </div>
+      </div>
+
+      <div class="fgrp" style="margin-bottom:14px">
+        <label class="flbl" for="fService">نوع الخدمة</label>
+        <div class="select-wrap">
+          <select id="fService">
+            <option value="">اختر الخدمة</option>
+            <optgroup label="التصميم">
+              <option value="تصميم جرافيك">تصميم جرافيك</option>
+              <option value="تصميم واجهات">تصميم واجهات UI/UX</option>
+              <option value="تصميم هوية">تصميم هوية بصرية</option>
+              <option value="تصميم تجارب">تصميم تجارب المستخدم</option>
+            </optgroup>
+            <optgroup label="التطوير">
+              <option value="تطوير ويب">تطوير ويب</option>
+              <option value="تطوير تطبيقات">تطوير تطبيقات</option>
+              <option value="تطوير برمجيات">برمجيات مخصصة</option>
+              <option value="تطوير ووردبريس">تطوير ووردبريس</option>
+            </optgroup>
+            <optgroup label="التسويق">
+              <option value="تسويق رقمي">تسويق رقمي</option>
+              <option value="إدارة تواصل">إدارة وسائل التواصل</option>
+              <option value="تحسين محركات">تحسين محركات SEO</option>
+              <option value="إعلانات مدفوعة">إعلانات مدفوعة</option>
+            </optgroup>
+            <option value="أخرى">أخرى</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fgrp" id="grpMsg">
+        <label class="flbl" for="fMsg">رسالتك <span class="req">*</span></label>
+        <textarea class="finput" id="fMsg" maxlength="500" placeholder="اكتب تفاصيل مشروعك…" oninput="updateCount(this)"></textarea>
+        <div style="display:flex;justify-content:flex-end;margin-top:2px">
+          <span style="font-size:11px;color:var(--ink3)" id="charCount">0 / 500</span>
+        </div>
+        <span class="field-err-msg">الرسالة مطلوبة</span>
+      </div>
+
+      <button class="btn-send" id="sendBtn" onclick="doSend()">
+        <i class="fas fa-paper-plane"></i>
+        <span id="btnLabel">إرسال الرسالة</span>
+      </button>
+
+      <p class="privacy">
+        <i class="fas fa-shield-halved"></i>
+        بياناتك آمنة ومحمية
+      </p>
+    </div>
+
+    <div class="done" id="formDone">
+      <div class="done-ring"><i class="fas fa-check"></i></div>
+      <div class="done-title">تم الإرسال!</div>
+      <div class="done-sub">شكراً لك. سيرد فريقنا خلال 24 ساعة.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== VIDEO PLAYER ==========
+const video = document.getElementById('promoVideo');
+const wrap = document.getElementById('videoWrap');
+const overlay = document.getElementById('videoOverlay');
+const playBtn = document.getElementById('playBtn');
+const progress = document.getElementById('videoProgress');
+let playing = false;
+
+function toggleVideo(){
+  if(video.paused){
+    video.play();
+    playing = true;
+    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+  } else {
+    video.pause();
+    playing = false;
+    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+  }
+}
+playBtn.addEventListener('click', e => { e.stopPropagation(); toggleVideo(); });
+wrap.addEventListener('click', () => { if(!playing) toggleVideo(); });
+video.addEventListener('timeupdate', () => {
+  progress.style.width = (video.currentTime / video.duration * 100) + '%';
+});
+video.addEventListener('ended', () => {
+  playing = false;
+  playBtn.innerHTML = '<i class="fas fa-play"></i>';
+  progress.style.width = '0%';
+  video.currentTime = 0;
+});
+
+// ========== FORM ==========
+const ACTION = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse";
+const F = {
+  name: "entry.1001",
+  phone: "entry.1002",
+  email: "entry.1003",
+  service: "entry.1004",
+  msg: "entry.1005"
+};
+
+function updateCount(el){
+  document.getElementById('charCount').textContent = el.value.length + ' / ' + el.maxLength;
+}
+
+function validate(){
+  let ok = true;
+  const checks = [
+    {id:'fName', grp:'grpName', test:v => v.trim().length >= 2},
+    {id:'fEmail', grp:'grpEmail', test:v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())},
+    {id:'fMsg', grp:'grpMsg', test:v => v.trim().length >= 4},
+  ];
+  checks.forEach(({id,grp,test}) => {
+    const el = document.getElementById(id);
+    const g = document.getElementById(grp);
+    const pass = test(el.value);
+    g.classList.toggle('has-err', !pass);
+    el.classList.toggle('err', !pass);
+    if(!pass) ok = false;
+    el.addEventListener('input', function handler(){
+      if(test(el.value)){
+        g.classList.remove('has-err');
+        el.classList.remove('err');
+      }
+      el.removeEventListener('input', handler);
+    });
+  });
+  return ok;
+}
+
+async function doSend(){
+  if(!validate()) return;
+  const btn = document.getElementById('sendBtn');
+  const lbl = document.getElementById('btnLabel');
+  const icon = btn.querySelector('i');
+  btn.disabled = true;
+  lbl.textContent = 'جاري الإرسال…';
+  icon.className = 'fas fa-spinner spinner';
+  
+  const fd = new FormData();
+  fd.append(F.name, document.getElementById('fName').value.trim());
+  fd.append(F.phone, document.getElementById('fPhone').value.trim());
+  fd.append(F.email, document.getElementById('fEmail').value.trim());
+  fd.append(F.service, document.getElementById('fService').value);
+  fd.append(F.msg, document.getElementById('fMsg').value.trim());
+  
+  try {
+    await fetch(ACTION, {method:'POST', body:fd, mode:'no-cors'});
+  } catch(e){}
+  
+  document.getElementById('formArea').style.display = 'none';
+  document.getElementById('formDone').style.display = 'flex';
+  btn.disabled = false;
+}
+</script>
+</body>
+</html>

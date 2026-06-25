@@ -15,8 +15,7 @@
           ink:     { DEFAULT:'#0D0D14', 2:'#3A3A55', 3:'#7B7B99' },
           surf2:   '#F7F7FB',
           line:    '#E8E8F0',
-          whats:   '#25D366',
-          tg:      '#229ED9',
+          sect:    '#FAF8FD',
         },
         fontFamily: { cairo: ['Cairo','sans-serif'] }
       }
@@ -38,27 +37,17 @@
   .dd-open{opacity:1;transform:scaleY(1) translateY(0)}
 
   .focus-ring{transition:border-color .15s, box-shadow .15s}
-  .focus-ring:focus{outline:none;box-shadow:0 0 0 4px rgba(123,94,167,.15)}
+  .focus-ring:focus{outline:none;border-color:#7B5EA7;box-shadow:0 0 0 4px rgba(123,94,167,.15)}
 
-  /* ── dropdown trigger: defined border + shadow, not washed out ── */
-  .dd-trigger{
-    background:#fff;
-    border:2px solid rgba(13,13,20,.14);
-    box-shadow:0 1px 2px rgba(13,13,20,.04);
-    transition:border-color .15s, box-shadow .15s;
-  }
+  .dd-trigger{ background:#fff; border:2px solid rgba(13,13,20,.14); box-shadow:0 1px 2px rgba(13,13,20,.04); transition:border-color .15s, box-shadow .15s; }
   .dd-trigger:hover{ border-color:rgba(123,94,167,.45); }
   .dd-trigger.dd-active{ border-color:#7B5EA7; box-shadow:0 0 0 4px rgba(123,94,167,.13); }
 
-  .dd-panel{
-    background:#fff;
-    border:2px solid rgba(13,13,20,.10);
-    box-shadow:0 16px 40px rgba(13,13,20,.16);
-  }
-  .dd-icon-chip{
-    width:30px;height:30px;border-radius:9px;
-    background:#F0EDF7;display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  }
+  .dd-panel{ background:#fff; border:2px solid rgba(13,13,20,.10); box-shadow:0 16px 40px rgba(13,13,20,.16); }
+  .dd-icon-chip{ width:30px;height:30px;border-radius:9px; background:#F0EDF7; display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+
+  .step-num{ width:26px;height:26px;border-radius:50%;background:#7B5EA7;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .step-card{ background:#FAF8FD; border:1.5px solid rgba(123,94,167,.12); border-radius:18px; }
 
   @media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
 </style>
@@ -67,13 +56,12 @@
 
 <div class="max-w-[960px] mx-auto p-3 sm:p-6">
 
-  <!-- ════════════════════ SHELL (no overflow-hidden on wrapper — fixes dropdown clipping) ════════════════════ -->
   <div class="grid md:grid-cols-[400px_1fr] shadow-[0_18px_54px_rgba(0,0,0,.12)]">
 
-    <!-- ══ DARK PANEL (top on mobile / right on desktop in RTL) ══ -->
+    <!-- ══ DARK PANEL ══ -->
     <div class="bg-ink relative px-5 sm:px-7 md:px-10 py-7 md:py-12 flex flex-col rounded-t-3xl md:rounded-t-none md:rounded-r-3xl">
-      <div class="dr w-[380px] h-[380px] -top-[130px] -right-[130px] hidden md:block overflow-hidden"></div>
-      <div class="dr w-[240px] h-[240px] -bottom-20 -left-20 hidden md:block overflow-hidden"></div>
+      <div class="dr w-[380px] h-[380px] -top-[130px] -right-[130px] hidden md:block"></div>
+      <div class="dr w-[240px] h-[240px] -bottom-20 -left-20 hidden md:block"></div>
 
       <div class="relative z-10 flex items-center gap-3 mb-6 md:mb-10">
         <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-aurora flex items-center justify-center flex-shrink-0">
@@ -89,10 +77,9 @@
         دعنا نسمع <em class="not-italic text-aurora">فكرتك</em>
       </h1>
       <p class="relative z-10 text-white/45 text-[13px] leading-7 mb-7 max-w-[420px]">
-        كل مشروع عظيم يبدأ بمحادثة. شاركنا تفاصيلك وسنعود إليك في أقرب وقت.
+        كل مشروع عظيم يبدأ بمحادثة. عبّئ النموذج المجاور — لن يستغرق دقيقة واحدة.
       </p>
 
-      <!-- ════ "من نحن" BUTTON — opens video modal ════ -->
       <button id="aboutBtn" type="button"
               class="relative z-10 w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-3 px-5 py-3 rounded-xl bg-white/10 border border-white/20 text-white font-bold text-[14px] hover:bg-white/15 active:scale-[0.98] transition">
         <span class="w-8 h-8 rounded-full bg-aurora/90 flex items-center justify-center flex-shrink-0">
@@ -108,30 +95,39 @@
     <div class="bg-white px-5 sm:px-7 md:px-10 py-7 md:py-12 rounded-b-3xl md:rounded-b-none md:rounded-l-3xl">
 
       <div id="form-area">
-        <div class="flex items-center justify-between flex-wrap gap-2 mb-5">
-          <span class="inline-flex items-center gap-2 bg-aurora/[0.08] border border-aurora/20 text-aurora text-[11px] font-bold px-3 py-1.5 rounded-full">
-            <span class="w-1.5 h-1.5 rounded-full bg-aurora"></span> متاح الآن
+
+        <!-- friendly intro -->
+        <div class="mb-6">
+          <span class="inline-flex items-center gap-1.5 text-aurora text-[11.5px] font-bold mb-3">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> متاح الآن — الرد خلال 24 ساعة
           </span>
-          <span class="text-ink3 text-[11.5px]">الرد خلال 24 ساعة</span>
+          <h2 class="text-[22px] font-extrabold text-ink mb-2">أرسل رسالتك بثلاث خطوات بسيطة</h2>
+          <p class="text-ink2 text-[13.5px] leading-7">عبّئ المعلومات أدناه بالترتيب، ونحن نتولى باقي العملية 🙂</p>
         </div>
 
-        <h2 class="text-[22px] sm:text-[23px] font-extrabold text-ink mb-1">أرسل رسالتك</h2>
-        <p class="text-ink3 text-[13px] mb-6">أخبرنا بما تحتاجه وسنبني لك شيئاً رائعاً</p>
-        <div class="h-px bg-line mb-7"></div>
-
-        <!-- name + contact-method dropdown -->
-        <div class="grid sm:grid-cols-2 gap-4 mb-4">
-          <div id="grp-name">
-            <label for="f_name" class="block text-[15px] font-bold text-ink mb-2">الاسم <span class="text-aurora">*</span></label>
-            <input id="f_name" type="text" placeholder="اسمك الكامل"
-                   autocomplete="name" autocapitalize="words" enterkeyhint="next"
-                   class="focus-ring w-full min-h-[48px] px-4 py-3 bg-surf2 border border-line rounded-xl text-ink font-medium placeholder-ink3 text-[16px] sm:text-[14px]">
-            <p class="err-msg hidden text-red-500 text-[11px] font-semibold mt-1.5">الاسم مطلوب</p>
+        <!-- ═══ STEP 1 — about you ═══ -->
+        <div class="step-card p-4 sm:p-5 mb-4">
+          <div class="flex items-center gap-2.5 mb-4">
+            <span class="step-num">١</span>
+            <h3 class="text-[15px] font-bold text-ink">من أنت؟</h3>
           </div>
 
-          <!-- contact method dropdown -->
+          <label for="f_name" class="block text-[13.5px] font-bold text-ink2 mb-2">الاسم الكامل <span class="text-aurora">*</span></label>
+          <input id="f_name" type="text" placeholder="مثال: أحمد محمد"
+                 autocomplete="name" autocapitalize="words" enterkeyhint="next"
+                 class="focus-ring w-full min-h-[48px] px-4 py-3 bg-white border-2 border-line rounded-xl text-ink font-medium placeholder-ink3 text-[16px] sm:text-[14px]">
+          <p id="nameErr" class="hidden text-red-500 text-[11px] font-semibold mt-1.5">الاسم مطلوب لإكمال الطلب</p>
+        </div>
+
+        <!-- ═══ STEP 2 — contact method ═══ -->
+        <div class="step-card p-4 sm:p-5 mb-4">
+          <div class="flex items-center gap-2.5 mb-1.5">
+            <span class="step-num">٢</span>
+            <h3 class="text-[15px] font-bold text-ink">كيف نتواصل معك؟</h3>
+          </div>
+          <p class="text-ink3 text-[12px] mb-4 mr-[34px] leading-6">اختر الطريقة الأسهل بالنسبة لك، وسيظهر لك الحقل المناسب لها تلقائياً.</p>
+
           <div class="relative" id="methodDropdown">
-            <label class="block text-[15px] font-bold text-ink mb-2">كيف تريد أن نرد عليك؟ <span class="text-aurora">*</span></label>
             <button type="button" id="mdBtn" aria-haspopup="listbox" aria-expanded="false"
                     class="dd-trigger w-full min-h-[48px] flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-[14px]">
               <span id="mdLabelWrap" class="flex items-center gap-2.5">
@@ -144,72 +140,88 @@
             </button>
 
             <ul id="mdList" role="listbox" class="dd-list dd-closed dd-panel absolute z-50 mt-2 w-full rounded-2xl overflow-hidden py-1.5">
-              <li role="option" data-value="whatsapp" class="md-option mx-1.5 px-3 py-3 rounded-xl flex items-center gap-2.5 cursor-pointer hover:bg-[#25D366]/[0.08] transition">
+              <li role="option" data-value="whatsapp" class="md-option mx-1.5 px-3 py-3 rounded-xl flex items-center gap-2.5 cursor-pointer hover:bg-surf2 transition">
                 <span class="dd-icon-chip" style="background:#E9F9EF">
                   <svg viewBox="0 0 24 24" class="w-[16px] h-[16px]" fill="#25D366"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.84.5 3.65 1.45 5.24L2 22l4.97-1.55a9.8 9.8 0 0 0 5.07 1.4h.01c5.46 0 9.91-4.45 9.91-9.91A9.86 9.86 0 0 0 12.04 2m5.84 14.07c-.25.7-1.45 1.36-1.99 1.43-.51.07-1.16.1-1.87-.12-.43-.13-.98-.31-1.69-.61-2.97-1.28-4.9-4.27-5.05-4.47-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.59-.37.79-.37.2 0 .39 0 .56.01.18.01.42-.07.66.5.25.6.84 2.06.92 2.21.08.15.13.32.03.51-.45.94-.93 1.07-1.18 1.34-.13.14-.27.29-.12.55.55 1.04 1.27 1.97 2.22 2.73 1.01.81 1.91 1.16 2.31 1.32.2.08.43.07.59-.11.21-.24.46-.62.71-1 .18-.27.4-.31.66-.21.27.1 1.71.81 2 .96.3.15.5.22.57.35.07.13.07.74-.18 1.44z"/></svg>
                 </span>
-                <span class="font-bold text-[14px]" style="color:#25D366">واتساب</span>
+                <span>
+                  <span class="block font-bold text-[14px] text-ink">واتساب</span>
+                  <span class="block text-[11px] text-ink3">الأسرع للرد الفوري</span>
+                </span>
               </li>
-              <li role="option" data-value="telegram" class="md-option mx-1.5 px-3 py-3 rounded-xl flex items-center gap-2.5 cursor-pointer hover:bg-[#229ED9]/[0.08] transition">
+              <li role="option" data-value="telegram" class="md-option mx-1.5 px-3 py-3 rounded-xl flex items-center gap-2.5 cursor-pointer hover:bg-surf2 transition">
                 <span class="dd-icon-chip" style="background:#E8F4FB">
                   <svg viewBox="0 0 24 24" class="w-[16px] h-[16px]" fill="#229ED9"><path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2m4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.13-.05-.18s-.16-.04-.23-.02c-.1.02-1.65 1.05-4.66 3.08-.44.3-.84.45-1.2.44-.39-.01-1.15-.23-1.7-.42-.69-.24-1.24-.37-1.19-.78.02-.21.31-.43.86-.65 3.39-1.48 5.65-2.45 6.79-2.93 3.23-1.35 3.9-1.59 4.34-1.59.1 0 .31.02.45.14.11.1.15.23.16.33-.01.06.01.24 0 .39z"/></svg>
                 </span>
-                <span class="font-bold text-[14px]" style="color:#229ED9">تلكرام</span>
-              </li>
-              <li role="option" data-value="email" class="md-option mx-1.5 px-3 py-3 rounded-xl flex items-center gap-2.5 cursor-pointer hover:bg-ink/[0.05] transition border-t-2 border-line mt-1.5 pt-3.5">
-                <span class="dd-icon-chip" style="background:#EFEFF2">
-                  <svg viewBox="0 0 24 24" class="w-[16px] h-[16px] fill-none stroke-black" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                <span>
+                  <span class="block font-bold text-[14px] text-ink">تلكرام</span>
+                  <span class="block text-[11px] text-ink3">مناسب للملفات والروابط</span>
                 </span>
-                <span class="font-bold text-[14px] text-black">البريد الإلكتروني</span>
+              </li>
+              <li role="option" data-value="email" class="md-option mx-1.5 px-3 py-3 rounded-xl flex items-center gap-2.5 cursor-pointer hover:bg-surf2 transition border-t border-line mt-1.5 pt-3.5">
+                <span class="dd-icon-chip" style="background:#EFEFF2">
+                  <svg viewBox="0 0 24 24" class="w-[16px] h-[16px] fill-none stroke-ink2" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </span>
+                <span>
+                  <span class="block font-bold text-[14px] text-ink">البريد الإلكتروني</span>
+                  <span class="block text-[11px] text-ink3">مناسب للتفاصيل الرسمية</span>
+                </span>
               </li>
             </ul>
           </div>
-        </div>
 
-        <!-- dynamic contact-value box (appears after choosing method) -->
-        <div id="contactBox" class="hidden mb-4">
-          <label id="cbLabel" class="block text-[15px] font-bold text-ink mb-2">رقم هاتف الواتساب</label>
-          <div class="relative">
-            <span id="cbIcon" class="absolute inset-y-0 right-3 flex items-center pointer-events-none"></span>
-            <input id="cbInput" type="tel" placeholder="+964 7XX XXX XXXX" dir="ltr"
-                   class="focus-ring w-full min-h-[48px] pr-11 pl-4 py-3 bg-surf2 border-2 rounded-xl text-ink font-medium placeholder-ink3 text-[16px] sm:text-[14px] text-right">
+          <!-- dynamic contact-value box -->
+          <div id="contactBox" class="hidden mt-3.5">
+            <label id="cbLabel" class="block text-[13.5px] font-bold text-ink2 mb-2">رقم هاتف الواتساب</label>
+            <div class="relative">
+              <span id="cbIcon" class="absolute inset-y-0 right-3 flex items-center pointer-events-none"></span>
+              <input id="cbInput" type="tel" placeholder="+964 7XX XXX XXXX" dir="ltr"
+                     class="focus-ring w-full min-h-[48px] pr-11 pl-4 py-3 bg-white border-2 border-line rounded-xl text-ink font-medium placeholder-ink3 text-[16px] sm:text-[14px] text-right">
+            </div>
+            <p id="cbHint" class="text-ink3 text-[11px] mt-1.5">سنستخدم هذا الرقم للرد عليك عبر واتساب فقط.</p>
+            <p id="cbErr" class="hidden text-red-500 text-[11px] font-semibold mt-1.5">يرجى إدخال قيمة صحيحة</p>
           </div>
-          <p id="cbErr" class="hidden text-red-500 text-[11px] font-semibold mt-1.5">يرجى إدخال قيمة صحيحة</p>
         </div>
 
-        <!-- custom dropdown: service -->
-        <div class="mb-4 relative" id="serviceDropdown">
-          <label class="block text-[15px] font-bold text-ink mb-2">نوع الخدمة</label>
-          <button type="button" id="ddBtn" aria-haspopup="listbox" aria-expanded="false"
-                  class="dd-trigger w-full min-h-[48px] flex items-center justify-between px-4 py-3 rounded-2xl text-[14px]">
-            <span id="ddLabel" class="text-ink2 font-semibold">اختر نوع الخدمة</span>
-            <svg id="ddChevron" viewBox="0 0 24 24" class="w-[16px] h-[16px] fill-none stroke-ink2 transition-transform duration-200" stroke-width="2.3"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+        <!-- ═══ STEP 3 — request details ═══ -->
+        <div class="step-card p-4 sm:p-5 mb-6">
+          <div class="flex items-center gap-2.5 mb-4">
+            <span class="step-num">٣</span>
+            <h3 class="text-[15px] font-bold text-ink">ماذا تحتاج؟</h3>
+          </div>
 
-          <ul id="ddList" role="listbox" class="dd-list dd-closed dd-panel absolute z-50 mt-2 w-full rounded-2xl max-h-60 overflow-auto py-1.5">
-            <li role="option" data-value="تصميم" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition">تصميم</li>
-            <li role="option" data-value="تطوير" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition">تطوير</li>
-            <li role="option" data-value="تسويق" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition">تسويق</li>
-            <li role="option" data-value="استشارة" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition">استشارة</li>
-            <li role="option" data-value="أخرى" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition">أخرى</li>
-          </ul>
-          <input type="hidden" id="serviceValue" value="">
-        </div>
+          <div class="mb-4 relative" id="serviceDropdown">
+            <label class="block text-[13.5px] font-bold text-ink2 mb-2">نوع الخدمة</label>
+            <button type="button" id="ddBtn" aria-haspopup="listbox" aria-expanded="false"
+                    class="dd-trigger w-full min-h-[48px] flex items-center justify-between px-4 py-3 rounded-2xl text-[14px]">
+              <span id="ddLabel" class="text-ink2 font-semibold">اختر نوع الخدمة</span>
+              <svg id="ddChevron" viewBox="0 0 24 24" class="w-[16px] h-[16px] fill-none stroke-ink2 transition-transform duration-200" stroke-width="2.3"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
 
-        <!-- message — open-ended, taller -->
-        <div id="grp-msg" class="mb-2">
-          <label for="f_msg" class="block text-[15px] font-bold text-ink mb-2">رسالتك <span class="text-aurora">*</span></label>
-          <textarea id="f_msg" placeholder="اكتب تفاصيل مشروعك أو استفسارك… لا حدود لطول الرسالة" enterkeyhint="send"
-                    class="focus-ring w-full h-44 px-4 py-3 bg-surf2 border border-line rounded-xl text-ink font-medium placeholder-ink3 text-[16px] sm:text-[14px] resize-y leading-7"></textarea>
+            <ul id="ddList" role="listbox" class="dd-list dd-closed dd-panel absolute z-50 mt-2 w-full rounded-2xl max-h-60 overflow-auto py-1.5">
+              <li role="option" data-value="تصميم" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.08] cursor-pointer transition">تصميم</li>
+              <li role="option" data-value="تطوير" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.08] cursor-pointer transition">تطوير</li>
+              <li role="option" data-value="تسويق" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.08] cursor-pointer transition">تسويق</li>
+              <li role="option" data-value="استشارة" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.08] cursor-pointer transition">استشارة</li>
+              <li role="option" data-value="أخرى" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.08] cursor-pointer transition">أخرى</li>
+            </ul>
+            <input type="hidden" id="serviceValue" value="">
+          </div>
+
+          <label for="f_msg" class="block text-[13.5px] font-bold text-ink2 mb-2">تفاصيل رسالتك <span class="text-aurora">*</span></label>
+          <textarea id="f_msg" placeholder="اكتب هنا أي تفاصيل تساعدنا على فهم طلبك… لا حدود لطول الرسالة"
+                    enterkeyhint="send"
+                    class="focus-ring w-full h-40 px-4 py-3 bg-white border-2 border-line rounded-xl text-ink font-medium placeholder-ink3 text-[16px] sm:text-[14px] resize-y leading-7"></textarea>
           <div class="flex justify-between items-center mt-1.5">
-            <p class="err-msg hidden text-red-500 text-[11px] font-semibold">الرسالة مطلوبة</p>
+            <p id="msgErr" class="hidden text-red-500 text-[11px] font-semibold">الرسالة مطلوبة لإكمال الطلب</p>
             <span id="charCount" class="text-ink3 text-[11px] mr-auto">0 حرف</span>
           </div>
         </div>
 
-        <!-- submit — solid black matching header -->
+        <!-- submit -->
+        <p class="text-ink3 text-[12px] mb-3 text-center">كل المعلومات جاهزة؟ اضغط للإرسال 👇</p>
         <button id="send-btn" type="button"
-                class="w-full min-h-[52px] mt-5 rounded-xl bg-ink hover:bg-black text-white font-bold text-[15px] flex items-center justify-center gap-2.5 shadow-md shadow-ink/25 transition-all duration-150 active:scale-[0.98] touch-manipulation">
+                class="w-full min-h-[52px] rounded-xl bg-ink hover:bg-black text-white font-bold text-[15px] flex items-center justify-center gap-2.5 shadow-md shadow-ink/25 transition-all duration-150 active:scale-[0.98] touch-manipulation">
           <span id="btn-label">إرسال الرسالة</span>
           <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-none stroke-white flex-shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
         </button>
@@ -283,23 +295,13 @@ const videoModal = document.getElementById('videoModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const vid = document.getElementById('introVideo');
 
-function openModal(){
-  videoModal.classList.remove('hidden');
-  videoModal.classList.add('flex');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(){
-  videoModal.classList.add('hidden');
-  videoModal.classList.remove('flex');
-  document.body.style.overflow = '';
-  vid.pause();
-}
+function openModal(){ videoModal.classList.remove('hidden'); videoModal.classList.add('flex'); document.body.style.overflow = 'hidden'; }
+function closeModal(){ videoModal.classList.add('hidden'); videoModal.classList.remove('flex'); document.body.style.overflow = ''; vid.pause(); }
 aboutBtn.addEventListener('click', openModal);
 closeModalBtn.addEventListener('click', closeModal);
 videoModal.addEventListener('click', (e) => { if(e.target === videoModal) closeModal(); });
 document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
 
-/* ── player controls ── */
 const bigPlayBtn  = document.getElementById('bigPlayBtn');
 const bigPlayIcon = document.getElementById('bigPlayIcon');
 const bigPauseIcon= document.getElementById('bigPauseIcon');
@@ -315,41 +317,17 @@ const muteIcon    = document.getElementById('muteIcon');
 const fsBtn       = document.getElementById('fsBtn');
 const videoWrap   = document.getElementById('videoWrap');
 
-function fmt(t){
-  if(!isFinite(t) || t < 0) return '0:00';
-  const m = Math.floor(t/60), s = Math.floor(t%60);
-  return m + ':' + String(s).padStart(2,'0');
-}
+function fmt(t){ if(!isFinite(t) || t < 0) return '0:00'; const m=Math.floor(t/60), s=Math.floor(t%60); return m+':'+String(s).padStart(2,'0'); }
 function togglePlay(){ vid.paused ? vid.play() : vid.pause(); }
 bigPlayBtn.addEventListener('click', togglePlay);
 ctrlPlayBtn.addEventListener('click', togglePlay);
-
-vid.addEventListener('play', () => {
-  bigPlayIcon.classList.add('hidden');  bigPauseIcon.classList.remove('hidden');
-  ctrlPlayIcon.classList.add('hidden'); ctrlPauseIcon.classList.remove('hidden');
-});
-vid.addEventListener('pause', () => {
-  bigPlayIcon.classList.remove('hidden');  bigPauseIcon.classList.add('hidden');
-  ctrlPlayIcon.classList.remove('hidden'); ctrlPauseIcon.classList.add('hidden');
-});
-vid.addEventListener('loadedmetadata', () => {
-  durTimeEl.textContent = fmt(vid.duration);
-  seekBar.max = vid.duration || 100;
-});
-vid.addEventListener('timeupdate', () => {
-  seekBar.value = vid.currentTime;
-  curTimeEl.textContent = fmt(vid.currentTime);
-});
+vid.addEventListener('play', () => { bigPlayIcon.classList.add('hidden'); bigPauseIcon.classList.remove('hidden'); ctrlPlayIcon.classList.add('hidden'); ctrlPauseIcon.classList.remove('hidden'); });
+vid.addEventListener('pause', () => { bigPlayIcon.classList.remove('hidden'); bigPauseIcon.classList.add('hidden'); ctrlPlayIcon.classList.remove('hidden'); ctrlPauseIcon.classList.add('hidden'); });
+vid.addEventListener('loadedmetadata', () => { durTimeEl.textContent = fmt(vid.duration); seekBar.max = vid.duration || 100; });
+vid.addEventListener('timeupdate', () => { seekBar.value = vid.currentTime; curTimeEl.textContent = fmt(vid.currentTime); });
 seekBar.addEventListener('input', () => { vid.currentTime = seekBar.value; });
-muteBtn.addEventListener('click', () => {
-  vid.muted = !vid.muted;
-  volIcon.classList.toggle('hidden', vid.muted);
-  muteIcon.classList.toggle('hidden', !vid.muted);
-});
-fsBtn.addEventListener('click', () => {
-  if(videoWrap.requestFullscreen) videoWrap.requestFullscreen();
-  else if(videoWrap.webkitRequestFullscreen) videoWrap.webkitRequestFullscreen();
-});
+muteBtn.addEventListener('click', () => { vid.muted = !vid.muted; volIcon.classList.toggle('hidden', vid.muted); muteIcon.classList.toggle('hidden', !vid.muted); });
+fsBtn.addEventListener('click', () => { if(videoWrap.requestFullscreen) videoWrap.requestFullscreen(); else if(videoWrap.webkitRequestFullscreen) videoWrap.webkitRequestFullscreen(); });
 
 /* ════════════════════ CONTACT METHOD DROPDOWN ════════════════════ */
 const mdBtn = document.getElementById('mdBtn');
@@ -360,28 +338,29 @@ const contactBox = document.getElementById('contactBox');
 const cbLabel = document.getElementById('cbLabel');
 const cbIcon = document.getElementById('cbIcon');
 const cbInput = document.getElementById('cbInput');
+const cbHint = document.getElementById('cbHint');
 const cbErr = document.getElementById('cbErr');
 
 const METHODS = {
   whatsapp: {
-    label: 'رقم هاتف الواتساب', placeholder: '+964 7XX XXX XXXX', type: 'tel', inputmode: 'tel',
-    color: '#25D366',
-    icon: '<svg viewBox="0 0 24 24" class="w-[18px] h-[18px]" fill="#25D366"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.84.5 3.65 1.45 5.24L2 22l4.97-1.55a9.8 9.8 0 0 0 5.07 1.4h.01c5.46 0 9.91-4.45 9.91-9.91A9.86 9.86 0 0 0 12.04 2m5.84 14.07c-.25.7-1.45 1.36-1.99 1.43-.51.07-1.16.1-1.87-.12-.43-.13-.98-.31-1.69-.61-2.97-1.28-4.9-4.27-5.05-4.47-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.59-.37.79-.37.2 0 .39 0 .56.01.18.01.42-.07.66.5.25.6.84 2.06.92 2.21.08.15.13.32.03.51-.45.94-.93 1.07-1.18 1.34-.13.14-.27.29-.12.55.55 1.04 1.27 1.97 2.22 2.73 1.01.81 1.91 1.16 2.31 1.32.2.08.43.07.59-.11.21-.24.46-.62.71-1 .18-.27.4-.31.66-.21.27.1 1.71.81 2 .96.3.15.5.22.57.35.07.13.07.74-.18 1.44z"/></svg>',
-    label_html: '<span class="font-bold text-[14px]" style="color:#25D366">واتساب</span>',
+    label:'رقم هاتف الواتساب', hint:'سنستخدم هذا الرقم للرد عليك عبر واتساب فقط.',
+    placeholder:'+964 7XX XXX XXXX', type:'tel', inputmode:'tel', color:'#25D366', bg:'#E9F9EF',
+    icon:'<svg viewBox="0 0 24 24" class="w-[16px] h-[16px]" fill="#25D366"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.84.5 3.65 1.45 5.24L2 22l4.97-1.55a9.8 9.8 0 0 0 5.07 1.4h.01c5.46 0 9.91-4.45 9.91-9.91A9.86 9.86 0 0 0 12.04 2m5.84 14.07c-.25.7-1.45 1.36-1.99 1.43-.51.07-1.16.1-1.87-.12-.43-.13-.98-.31-1.69-.61-2.97-1.28-4.9-4.27-5.05-4.47-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.59-.37.79-.37.2 0 .39 0 .56.01.18.01.42-.07.66.5.25.6.84 2.06.92 2.21.08.15.13.32.03.51-.45.94-.93 1.07-1.18 1.34-.13.14-.27.29-.12.55.55 1.04 1.27 1.97 2.22 2.73 1.01.81 1.91 1.16 2.31 1.32.2.08.43.07.59-.11.21-.24.46-.62.71-1 .18-.27.4-.31.66-.21.27.1 1.71.81 2 .96.3.15.5.22.57.35.07.13.07.74-.18 1.44z"/></svg>',
+    labelHtml:'<span><span class="block font-bold text-[14px] text-ink">واتساب</span><span class="block text-[11px] text-ink3">الأسرع للرد الفوري</span></span>',
     validate: v => /^[+\d][\d\s-]{7,}$/.test(v.trim())
   },
   telegram: {
-    label: 'اسم المستخدم أو رقم تلكرام', placeholder: '@username أو +964 7XX XXX XXXX', type: 'text', inputmode: 'text',
-    color: '#229ED9',
-    icon: '<svg viewBox="0 0 24 24" class="w-[18px] h-[18px]" fill="#229ED9"><path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2m4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.13-.05-.18s-.16-.04-.23-.02c-.1.02-1.65 1.05-4.66 3.08-.44.3-.84.45-1.2.44-.39-.01-1.15-.23-1.7-.42-.69-.24-1.24-.37-1.19-.78.02-.21.31-.43.86-.65 3.39-1.48 5.65-2.45 6.79-2.93 3.23-1.35 3.9-1.59 4.34-1.59.1 0 .31.02.45.14.11.1.15.23.16.33-.01.06.01.24 0 .39z"/></svg>',
-    label_html: '<span class="font-bold text-[14px]" style="color:#229ED9">تلكرام</span>',
+    label:'اسم المستخدم أو رقم تلكرام', hint:'يمكنك كتابة @username أو رقم الهاتف المرتبط بحسابك.',
+    placeholder:'@username أو +964 7XX XXX XXXX', type:'text', inputmode:'text', color:'#229ED9', bg:'#E8F4FB',
+    icon:'<svg viewBox="0 0 24 24" class="w-[16px] h-[16px]" fill="#229ED9"><path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2m4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.13-.05-.18s-.16-.04-.23-.02c-.1.02-1.65 1.05-4.66 3.08-.44.3-.84.45-1.2.44-.39-.01-1.15-.23-1.7-.42-.69-.24-1.24-.37-1.19-.78.02-.21.31-.43.86-.65 3.39-1.48 5.65-2.45 6.79-2.93 3.23-1.35 3.9-1.59 4.34-1.59.1 0 .31.02.45.14.11.1.15.23.16.33-.01.06.01.24 0 .39z"/></svg>',
+    labelHtml:'<span><span class="block font-bold text-[14px] text-ink">تلكرام</span><span class="block text-[11px] text-ink3">مناسب للملفات والروابط</span></span>',
     validate: v => v.trim().length > 2
   },
   email: {
-    label: 'البريد الإلكتروني', placeholder: 'email@example.com', type: 'email', inputmode: 'email',
-    color: '#111111',
-    icon: '<svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-none stroke-black" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
-    label_html: '<span class="font-bold text-[14px] text-black">البريد الإلكتروني</span>',
+    label:'البريد الإلكتروني', hint:'سنرسل ردنا وأي تفاصيل إضافية إلى هذا البريد.',
+    placeholder:'email@example.com', type:'email', inputmode:'email', color:'#3A3A55', bg:'#EFEFF2',
+    icon:'<svg viewBox="0 0 24 24" class="w-[16px] h-[16px] fill-none stroke-ink2" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
+    labelHtml:'<span><span class="block font-bold text-[14px] text-ink">البريد الإلكتروني</span><span class="block text-[11px] text-ink3">مناسب للتفاصيل الرسمية</span></span>',
     validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
   }
 };
@@ -398,7 +377,7 @@ mdList.querySelectorAll('.md-option').forEach(opt => {
     const m = METHODS[key];
     currentMethod = key;
 
-    mdLabelWrap.innerHTML = '<span class="dd-icon-chip">' + m.icon + '</span>' + m.label_html;
+    mdLabelWrap.innerHTML = '<span class="dd-icon-chip" style="background:'+m.bg+'">' + m.icon + '</span>' + m.labelHtml;
 
     cbLabel.textContent = m.label;
     cbIcon.innerHTML = m.icon;
@@ -406,8 +385,8 @@ mdList.querySelectorAll('.md-option').forEach(opt => {
     cbInput.inputMode = m.inputmode;
     cbInput.placeholder = m.placeholder;
     cbInput.value = '';
-    cbInput.style.borderColor = m.color + '55';
-    cbInput.dir = (m.type === 'email') ? 'ltr' : 'ltr';
+    cbInput.style.borderColor = '';
+    cbHint.textContent = m.hint;
     cbErr.classList.add('hidden');
     contactBox.classList.remove('hidden');
 
@@ -415,14 +394,10 @@ mdList.querySelectorAll('.md-option').forEach(opt => {
   });
 });
 
-cbInput.addEventListener('focus', () => {
-  if(currentMethod){ cbInput.style.boxShadow = '0 0 0 4px ' + METHODS[currentMethod].color + '26'; }
-});
+cbInput.addEventListener('focus', () => { if(currentMethod){ cbInput.style.borderColor = METHODS[currentMethod].color; cbInput.style.boxShadow = '0 0 0 4px ' + METHODS[currentMethod].color + '22'; } });
 cbInput.addEventListener('blur', () => { cbInput.style.boxShadow = 'none'; });
 
-document.addEventListener('click', (e) => {
-  if(!document.getElementById('methodDropdown').contains(e.target)) closeMd();
-});
+document.addEventListener('click', (e) => { if(!document.getElementById('methodDropdown').contains(e.target)) closeMd(); });
 
 /* ════════════════════ SERVICE DROPDOWN ════════════════════ */
 const ddBtn   = document.getElementById('ddBtn');
@@ -443,11 +418,9 @@ ddList.querySelectorAll('.dd-option').forEach(opt => {
     closeDropdown();
   });
 });
-document.addEventListener('click', (e) => {
-  if(!document.getElementById('serviceDropdown').contains(e.target)) closeDropdown();
-});
+document.addEventListener('click', (e) => { if(!document.getElementById('serviceDropdown').contains(e.target)) closeDropdown(); });
 
-/* ════════════════════ CHAR COUNT (open-ended) ════════════════════ */
+/* ════════════════════ CHAR COUNT ════════════════════ */
 const msgEl = document.getElementById('f_msg');
 const charCount = document.getElementById('charCount');
 msgEl.addEventListener('input', () => { charCount.textContent = msgEl.value.length + ' حرف'; });
@@ -456,21 +429,15 @@ msgEl.addEventListener('input', () => { charCount.textContent = msgEl.value.leng
 const ACTION = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse";
 const F = { name:"entry.1001", method:"entry.1002", value:"entry.1003", service:"entry.1004", msg:"entry.1005" };
 
-function setError(inputId, grpId, hasError){
-  const input = document.getElementById(inputId);
-  const grp = document.getElementById(grpId);
-  input.classList.toggle('border-red-400', hasError);
-  const msg = grp.querySelector('.err-msg');
-  if(msg) msg.classList.toggle('hidden', !hasError);
-}
-
 function validate(){
   let ok = true;
   const name = document.getElementById('f_name').value.trim();
   const msg = msgEl.value.trim();
+  const nameInput = document.getElementById('f_name');
 
   const nameOk = name.length > 1;
-  setError('f_name','grp-name', !nameOk);
+  nameInput.classList.toggle('border-red-400', !nameOk);
+  document.getElementById('nameErr').classList.toggle('hidden', nameOk);
   if(!nameOk) ok = false;
 
   if(!currentMethod){
@@ -485,7 +452,8 @@ function validate(){
   }
 
   const msgOk = msg.length > 3;
-  setError('f_msg','grp-msg', !msgOk);
+  msgEl.classList.toggle('border-red-400', !msgOk);
+  document.getElementById('msgErr').classList.toggle('hidden', msgOk);
   if(!msgOk) ok = false;
 
   return ok;

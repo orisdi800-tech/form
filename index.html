@@ -33,32 +33,89 @@
   input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:#7B5EA7;box-shadow:0 0 0 4px rgba(123,94,167,.25);cursor:pointer}
   input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:#7B5EA7;border:none;cursor:pointer}
 
-  .dd-list{transform-origin:top center;transition:opacity .16s ease,transform .16s ease}
+  .dd-list{transform-origin:top center;transition:opacity .15s ease,transform .15s ease}
   .dd-closed{opacity:0;transform:scaleY(.94) translateY(-4px);pointer-events:none}
   .dd-open{opacity:1;transform:scaleY(1) translateY(0)}
 
-  .focus-ring{transition:border-color .15s, box-shadow .15s}
-  .focus-ring:focus{outline:none;box-shadow:0 0 0 4px rgba(123,94,167,.15)}
+  /* ══ RADIUS SYSTEM — three deliberate tiers, used consistently ══
+     12px  → controls (inputs, buttons)
+     18px  → containers (dropdown panels)
+     full  → selectors & badges (dropdown triggers, pills, avatars)  */
 
-  /* ── dropdown trigger: defined border + shadow, not washed out ── */
-  .dd-trigger{
-    background:#fff;
-    border:2px solid rgba(13,13,20,.14);
-    box-shadow:0 1px 2px rgba(13,13,20,.04);
-    transition:border-color .15s, box-shadow .15s;
+  /* ── text inputs: control tier ── */
+  .field-fill{
+    background:#EEECF4;
+    border:2px solid rgba(13,13,20,.10);
+    border-radius:12px;
+    transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
   }
-  .dd-trigger:hover{ border-color:rgba(123,94,167,.45); }
-  .dd-trigger.dd-active{ border-color:#7B5EA7; box-shadow:0 0 0 4px rgba(123,94,167,.13); }
+  .field-fill:focus{
+    outline:none;
+    background:#fff;
+    border-color:#7B5EA7;
+    box-shadow:0 0 0 4px rgba(123,94,167,.15);
+  }
+  .field-fill.border-red-400{ border-color:#F87171 !important; background:#FEF2F2; }
 
+  /* ── dropdown triggers: selector tier (pill) ── */
+  .dd-trigger{
+    background: rgba(123,94,167,.065);
+    border: 1.5px solid rgba(123,94,167,.32);
+    border-radius: 999px;
+    transition: background .15s ease, border-color .15s ease, box-shadow .15s ease;
+  }
+  .dd-trigger:hover{ background: rgba(123,94,167,.1); border-color: rgba(123,94,167,.5); }
+  .dd-trigger.dd-active{
+    border-color:#7B5EA7;
+    background: rgba(123,94,167,.13);
+    box-shadow: 0 0 0 4px rgba(123,94,167,.14);
+  }
+  .dd-chevron-chip{
+    width:24px;height:24px;border-radius:50%;
+    background:rgba(123,94,167,.15);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    transition: transform .22s ease; /* slightly longer: larger rotational motion reads more naturally with a touch more time */
+  }
+  .dd-trigger.dd-active .dd-chevron-chip{ transform: rotate(180deg); }
+
+  /* ── dropdown panels: container tier ── */
   .dd-panel{
     background:#fff;
     border:2px solid rgba(13,13,20,.10);
+    border-radius:18px;
     box-shadow:0 16px 40px rgba(13,13,20,.16);
   }
   .dd-icon-chip{
-    width:30px;height:30px;border-radius:9px;
+    width:30px;height:30px;border-radius:50%;
     background:#F0EDF7;display:flex;align-items:center;justify-content:center;flex-shrink:0;
   }
+
+  /* ── label icon: small wayfinding glyph, consistent across every field ── */
+  .lbl-icon{ width:14px;height:14px;flex-shrink:0;stroke:#7B5EA7;fill:none;stroke-width:2.2;opacity:.85; }
+
+  /* ── compact "about" pill — small, secondary, red play dot ── */
+  .about-pill{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:7px 14px 7px 8px;
+    border-radius:999px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.14);
+    color: rgba(255,255,255,.82);
+    font-size:12.5px; font-weight:700;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .about-pill:hover{ background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.22); }
+  .about-pill:active{ transform: scale(.96); }
+  .about-pill-dot{
+    width:22px;height:22px;border-radius:50%;
+    background:#FF3B3B;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    box-shadow:0 0 0 3px rgba(255,59,59,.18);
+  }
+
+  /* ── trust row in dark panel — fills negative space with reassurance, not decoration ── */
+  .trust-row{ display:flex; align-items:center; gap:9px; }
+  .trust-row svg{ width:13px;height:13px;flex-shrink:0;stroke:#7B5EA7;fill:none;stroke-width:2.6; }
 
   @media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
 </style>
@@ -67,15 +124,14 @@
 
 <div class="max-w-[960px] mx-auto p-3 sm:p-6">
 
-  <!-- ════════════════════ SHELL (no overflow-hidden on wrapper — fixes dropdown clipping) ════════════════════ -->
-  <div class="grid md:grid-cols-[400px_1fr] shadow-[0_18px_54px_rgba(0,0,0,.12)]">
+  <div class="grid md:grid-cols-[368px_1fr] shadow-[0_18px_54px_rgba(0,0,0,.12)]">
 
-    <!-- ══ DARK PANEL (top on mobile / right on desktop in RTL) ══ -->
-    <div class="bg-ink relative px-5 sm:px-7 md:px-10 py-7 md:py-12 flex flex-col rounded-t-3xl md:rounded-t-none md:rounded-r-3xl">
-      <div class="dr w-[380px] h-[380px] -top-[130px] -right-[130px] hidden md:block overflow-hidden"></div>
-      <div class="dr w-[240px] h-[240px] -bottom-20 -left-20 hidden md:block overflow-hidden"></div>
+    <!-- ══ DARK PANEL ══ -->
+    <div class="bg-ink relative px-5 sm:px-7 md:px-9 py-7 md:py-12 flex flex-col rounded-t-3xl md:rounded-t-none md:rounded-r-3xl">
+      <div class="dr w-[340px] h-[340px] -top-[120px] -right-[120px] hidden md:block overflow-hidden"></div>
+      <div class="dr w-[220px] h-[220px] -bottom-20 -left-20 hidden md:block overflow-hidden"></div>
 
-      <div class="relative z-10 flex items-center gap-3 mb-6 md:mb-10">
+      <div class="relative z-10 flex items-center gap-3 mb-6 md:mb-9">
         <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-aurora flex items-center justify-center flex-shrink-0">
           <svg viewBox="0 0 24 24" class="w-[20px] h-[20px] fill-white"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
@@ -85,21 +141,35 @@
         </div>
       </div>
 
-      <h1 class="relative z-10 text-white text-2xl sm:text-[28px] font-black leading-[1.25] mb-3">
+      <h1 class="relative z-10 text-white text-2xl sm:text-[27px] font-black leading-[1.28] mb-3">
         دعنا نسمع <em class="not-italic text-aurora">فكرتك</em>
       </h1>
-      <p class="relative z-10 text-white/45 text-[13px] leading-7 mb-7 max-w-[420px]">
+      <p class="relative z-10 text-white/45 text-[13px] leading-7 mb-5 max-w-[380px]">
         كل مشروع عظيم يبدأ بمحادثة. شاركنا تفاصيلك وسنعود إليك في أقرب وقت.
       </p>
 
-      <!-- ════ "من نحن" BUTTON — opens video modal ════ -->
-      <button id="aboutBtn" type="button"
-              class="relative z-10 w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-3 px-5 py-3 rounded-xl bg-white/10 border border-white/20 text-white font-bold text-[14px] hover:bg-white/15 active:scale-[0.98] transition">
-        <span class="w-8 h-8 rounded-full bg-aurora/90 flex items-center justify-center flex-shrink-0">
-          <svg viewBox="0 0 24 24" class="w-[14px] h-[14px] fill-white"><path d="M8 5v14l11-7z"/></svg>
+      <button id="aboutBtn" type="button" class="about-pill relative z-10">
+        <span class="about-pill-dot">
+          <svg viewBox="0 0 24 24" class="w-[10px] h-[10px] fill-white"><path d="M8 5v14l11-7z"/></svg>
         </span>
-        <span>من نحن — شاهد الفيديو</span>
+        <span>من نحن</span>
       </button>
+
+      <!-- trust signals — fill the panel's natural negative space with reassurance, not filler -->
+      <div class="relative z-10 hidden md:flex flex-col gap-3.5 mt-10">
+        <div class="trust-row">
+          <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          <span class="text-white/55 text-[12px] font-semibold">رد سريع خلال 24 ساعة</span>
+        </div>
+        <div class="trust-row">
+          <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          <span class="text-white/55 text-[12px] font-semibold">تواصل عبر القناة التي تفضلها</span>
+        </div>
+        <div class="trust-row">
+          <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          <span class="text-white/55 text-[12px] font-semibold">بياناتك لا تُشارك مع أي طرف</span>
+        </div>
+      </div>
 
       <div class="relative z-10 text-white/20 text-[11px] mt-auto pt-8 hidden md:block">© 2026 Studio Aurora — جميع الحقوق محفوظة</div>
     </div>
@@ -108,55 +178,62 @@
     <div class="bg-white px-5 sm:px-7 md:px-10 py-7 md:py-12 rounded-b-3xl md:rounded-b-none md:rounded-l-3xl">
 
       <div id="form-area">
-        <div class="flex items-center justify-between flex-wrap gap-2 mb-5">
-          <span class="inline-flex items-center gap-2 bg-aurora/[0.08] border border-aurora/20 text-aurora text-[11px] font-bold px-3 py-1.5 rounded-full">
-            <span class="w-1.5 h-1.5 rounded-full bg-aurora"></span> متاح الآن
-          </span>
-          <span class="text-ink3 text-[11.5px]">الرد خلال 24 ساعة</span>
+
+        <!-- single unified status signal — one focal message, not two competing ones -->
+        <div class="inline-flex items-center gap-2 bg-aurora/[0.08] border border-aurora/20 text-aurora text-[11.5px] font-bold px-3.5 py-2 rounded-full mb-5">
+          <span class="w-1.5 h-1.5 rounded-full bg-aurora flex-shrink-0"></span>
+          متاح الآن — نرد عليك خلال 24 ساعة
         </div>
 
         <h2 class="text-[22px] sm:text-[23px] font-extrabold text-ink mb-1">أرسل رسالتك</h2>
-        <p class="text-ink3 text-[13px] mb-6">أخبرنا بما تحتاجه وسنبني لك شيئاً رائعاً</p>
+        <p class="text-ink2 text-[13px] mb-6">أخبرنا بما تحتاجه وسنبني لك شيئاً رائعاً</p>
         <div class="h-px bg-line mb-7"></div>
 
-        <!-- name + contact-method dropdown -->
-        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+        <!-- group 1: identity + contact method -->
+        <div class="grid sm:grid-cols-2 gap-4 mb-5">
           <div id="grp-name">
-            <label for="f_name" class="block text-[15px] font-bold text-ink mb-2">الاسم <span class="text-aurora">*</span></label>
+            <label for="f_name" class="flex items-center gap-1.5 text-[15px] font-bold text-ink mb-2">
+              <svg class="lbl-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+              <span>الاسم <span class="text-aurora">*</span></span>
+            </label>
             <input id="f_name" type="text" placeholder="اسمك الكامل"
                    autocomplete="name" autocapitalize="words" enterkeyhint="next"
-                   class="focus-ring w-full min-h-[48px] px-4 py-3 bg-surf2 border border-line rounded-xl text-ink font-medium placeholder-ink3 text-[16px] sm:text-[14px]">
+                   class="field-fill w-full min-h-[48px] px-4 py-3 text-ink font-medium placeholder-ink3 text-[16px] sm:text-[14px]">
             <p class="err-msg hidden text-red-500 text-[11px] font-semibold mt-1.5">الاسم مطلوب</p>
           </div>
 
-          <!-- contact method dropdown -->
           <div class="relative" id="methodDropdown">
-            <label class="block text-[15px] font-bold text-ink mb-2">كيف تريد أن نرد عليك؟ <span class="text-aurora">*</span></label>
+            <label class="flex items-center gap-1.5 text-[15px] font-bold text-ink mb-2">
+              <svg class="lbl-icon" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+              <span>كيف تريد أن نرد عليك؟ <span class="text-aurora">*</span></span>
+            </label>
             <button type="button" id="mdBtn" aria-haspopup="listbox" aria-expanded="false"
-                    class="dd-trigger w-full min-h-[48px] flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-[14px]">
+                    class="dd-trigger w-full min-h-[48px] flex items-center justify-between px-3.5 py-2.5 text-[14px]">
               <span id="mdLabelWrap" class="flex items-center gap-2.5">
                 <span class="dd-icon-chip">
-                  <svg viewBox="0 0 24 24" class="w-[15px] h-[15px] fill-none stroke-ink2" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+                  <svg viewBox="0 0 24 24" class="w-[14px] h-[14px] fill-none stroke-ink2" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 116 0c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                 </span>
                 <span id="mdLabel" class="text-ink2 font-semibold">اختر طريقة التواصل</span>
               </span>
-              <svg id="mdChevron" viewBox="0 0 24 24" class="w-[16px] h-[16px] fill-none stroke-ink2 transition-transform duration-200" stroke-width="2.3"><path d="M6 9l6 6 6-6"/></svg>
+              <span class="dd-chevron-chip">
+                <svg id="mdChevron" viewBox="0 0 24 24" class="w-[12px] h-[12px] fill-none stroke-aurora" stroke-width="2.6"><path d="M6 9l6 6 6-6"/></svg>
+              </span>
             </button>
 
-            <ul id="mdList" role="listbox" class="dd-list dd-closed dd-panel absolute z-50 mt-2 w-full rounded-2xl overflow-hidden py-1.5">
-              <li role="option" data-value="whatsapp" class="md-option mx-1.5 px-3 py-3 rounded-xl flex items-center gap-2.5 cursor-pointer hover:bg-[#25D366]/[0.08] transition">
+            <ul id="mdList" role="listbox" class="dd-list dd-closed dd-panel absolute z-50 mt-2 w-full overflow-hidden py-1.5">
+              <li role="option" data-value="whatsapp" class="md-option mx-1.5 px-3 py-3 rounded-xl flex items-center gap-2.5 cursor-pointer hover:bg-[#25D366]/[0.08] transition-colors duration-150">
                 <span class="dd-icon-chip" style="background:#E9F9EF">
                   <svg viewBox="0 0 24 24" class="w-[16px] h-[16px]" fill="#25D366"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.84.5 3.65 1.45 5.24L2 22l4.97-1.55a9.8 9.8 0 0 0 5.07 1.4h.01c5.46 0 9.91-4.45 9.91-9.91A9.86 9.86 0 0 0 12.04 2m5.84 14.07c-.25.7-1.45 1.36-1.99 1.43-.51.07-1.16.1-1.87-.12-.43-.13-.98-.31-1.69-.61-2.97-1.28-4.9-4.27-5.05-4.47-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.59-.37.79-.37.2 0 .39 0 .56.01.18.01.42-.07.66.5.25.6.84 2.06.92 2.21.08.15.13.32.03.51-.45.94-.93 1.07-1.18 1.34-.13.14-.27.29-.12.55.55 1.04 1.27 1.97 2.22 2.73 1.01.81 1.91 1.16 2.31 1.32.2.08.43.07.59-.11.21-.24.46-.62.71-1 .18-.27.4-.31.66-.21.27.1 1.71.81 2 .96.3.15.5.22.57.35.07.13.07.74-.18 1.44z"/></svg>
                 </span>
                 <span class="font-bold text-[14px]" style="color:#25D366">واتساب</span>
               </li>
-              <li role="option" data-value="telegram" class="md-option mx-1.5 px-3 py-3 rounded-xl flex items-center gap-2.5 cursor-pointer hover:bg-[#229ED9]/[0.08] transition">
+              <li role="option" data-value="telegram" class="md-option mx-1.5 px-3 py-3 rounded-xl flex items-center gap-2.5 cursor-pointer hover:bg-[#229ED9]/[0.08] transition-colors duration-150">
                 <span class="dd-icon-chip" style="background:#E8F4FB">
                   <svg viewBox="0 0 24 24" class="w-[16px] h-[16px]" fill="#229ED9"><path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2m4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.13-.05-.18s-.16-.04-.23-.02c-.1.02-1.65 1.05-4.66 3.08-.44.3-.84.45-1.2.44-.39-.01-1.15-.23-1.7-.42-.69-.24-1.24-.37-1.19-.78.02-.21.31-.43.86-.65 3.39-1.48 5.65-2.45 6.79-2.93 3.23-1.35 3.9-1.59 4.34-1.59.1 0 .31.02.45.14.11.1.15.23.16.33-.01.06.01.24 0 .39z"/></svg>
                 </span>
                 <span class="font-bold text-[14px]" style="color:#229ED9">تلكرام</span>
               </li>
-              <li role="option" data-value="email" class="md-option mx-1.5 px-3 py-3 rounded-xl flex items-center gap-2.5 cursor-pointer hover:bg-ink/[0.05] transition border-t-2 border-line mt-1.5 pt-3.5">
+              <li role="option" data-value="email" class="md-option mx-1.5 px-3 py-3 rounded-xl flex items-center gap-2.5 cursor-pointer hover:bg-ink/[0.05] transition-colors duration-150 border-t-2 border-line mt-1.5 pt-3.5">
                 <span class="dd-icon-chip" style="background:#EFEFF2">
                   <svg viewBox="0 0 24 24" class="w-[16px] h-[16px] fill-none stroke-black" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 </span>
@@ -166,56 +243,63 @@
           </div>
         </div>
 
-        <!-- dynamic contact-value box (appears after choosing method) -->
-        <div id="contactBox" class="hidden mb-4">
+        <!-- dynamic contact-value box -->
+        <div id="contactBox" class="hidden mb-5">
           <label id="cbLabel" class="block text-[15px] font-bold text-ink mb-2">رقم هاتف الواتساب</label>
           <div class="relative">
             <span id="cbIcon" class="absolute inset-y-0 right-3 flex items-center pointer-events-none"></span>
             <input id="cbInput" type="tel" placeholder="+964 7XX XXX XXXX" dir="ltr"
-                   class="focus-ring w-full min-h-[48px] pr-11 pl-4 py-3 bg-surf2 border-2 rounded-xl text-ink font-medium placeholder-ink3 text-[16px] sm:text-[14px] text-right">
+                   class="field-fill w-full min-h-[48px] pr-11 pl-4 py-3 text-ink font-medium placeholder-ink3 text-[16px] sm:text-[14px] text-right">
           </div>
           <p id="cbErr" class="hidden text-red-500 text-[11px] font-semibold mt-1.5">يرجى إدخال قيمة صحيحة</p>
         </div>
 
-        <!-- custom dropdown: service -->
-        <div class="mb-4 relative" id="serviceDropdown">
-          <label class="block text-[15px] font-bold text-ink mb-2">نوع الخدمة</label>
+        <!-- group 2: request details — slightly more top breathing room signals a new chunk -->
+        <div class="mb-5 relative" id="serviceDropdown">
+          <label class="flex items-center gap-1.5 text-[15px] font-bold text-ink mb-2">
+            <svg class="lbl-icon" viewBox="0 0 24 24"><path d="M20.59 13.41L13.42 20.6a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="6.5" cy="6.5" r="1.2" fill="#7B5EA7" stroke="none"/></svg>
+            <span>نوع الخدمة</span>
+          </label>
           <button type="button" id="ddBtn" aria-haspopup="listbox" aria-expanded="false"
-                  class="dd-trigger w-full min-h-[48px] flex items-center justify-between px-4 py-3 rounded-2xl text-[14px]">
+                  class="dd-trigger w-full min-h-[48px] flex items-center justify-between px-4 py-3 text-[14px]">
             <span id="ddLabel" class="text-ink2 font-semibold">اختر نوع الخدمة</span>
-            <svg id="ddChevron" viewBox="0 0 24 24" class="w-[16px] h-[16px] fill-none stroke-ink2 transition-transform duration-200" stroke-width="2.3"><path d="M6 9l6 6 6-6"/></svg>
+            <span class="dd-chevron-chip">
+              <svg id="ddChevron" viewBox="0 0 24 24" class="w-[12px] h-[12px] fill-none stroke-aurora" stroke-width="2.6"><path d="M6 9l6 6 6-6"/></svg>
+            </span>
           </button>
 
-          <ul id="ddList" role="listbox" class="dd-list dd-closed dd-panel absolute z-50 mt-2 w-full rounded-2xl max-h-60 overflow-auto py-1.5">
-            <li role="option" data-value="تصميم" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition">تصميم</li>
-            <li role="option" data-value="تطوير" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition">تطوير</li>
-            <li role="option" data-value="تسويق" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition">تسويق</li>
-            <li role="option" data-value="استشارة" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition">استشارة</li>
-            <li role="option" data-value="أخرى" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition">أخرى</li>
+          <ul id="ddList" role="listbox" class="dd-list dd-closed dd-panel absolute z-50 mt-2 w-full max-h-60 overflow-auto py-1.5">
+            <li role="option" data-value="تصميم" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition-colors duration-150">تصميم</li>
+            <li role="option" data-value="تطوير" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition-colors duration-150">تطوير</li>
+            <li role="option" data-value="تسويق" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition-colors duration-150">تسويق</li>
+            <li role="option" data-value="استشارة" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition-colors duration-150">استشارة</li>
+            <li role="option" data-value="أخرى" class="dd-option mx-1.5 px-3.5 py-3 rounded-xl font-semibold text-ink text-[14px] hover:bg-aurora/[0.09] cursor-pointer transition-colors duration-150">أخرى</li>
           </ul>
           <input type="hidden" id="serviceValue" value="">
         </div>
 
-        <!-- message — open-ended, taller -->
         <div id="grp-msg" class="mb-2">
-          <label for="f_msg" class="block text-[15px] font-bold text-ink mb-2">رسالتك <span class="text-aurora">*</span></label>
+          <label for="f_msg" class="flex items-center gap-1.5 text-[15px] font-bold text-ink mb-2">
+            <svg class="lbl-icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            <span>رسالتك <span class="text-aurora">*</span></span>
+          </label>
           <textarea id="f_msg" placeholder="اكتب تفاصيل مشروعك أو استفسارك… لا حدود لطول الرسالة" enterkeyhint="send"
-                    class="focus-ring w-full h-44 px-4 py-3 bg-surf2 border border-line rounded-xl text-ink font-medium placeholder-ink3 text-[16px] sm:text-[14px] resize-y leading-7"></textarea>
+                    class="field-fill w-full h-44 px-4 py-3 text-ink font-medium placeholder-ink3 text-[16px] sm:text-[14px] resize-y leading-7"></textarea>
           <div class="flex justify-between items-center mt-1.5">
             <p class="err-msg hidden text-red-500 text-[11px] font-semibold">الرسالة مطلوبة</p>
             <span id="charCount" class="text-ink3 text-[11px] mr-auto">0 حرف</span>
           </div>
         </div>
 
-        <!-- submit — solid black matching header -->
+        <!-- primary action — extra top space isolates it as the clear next step -->
         <button id="send-btn" type="button"
-                class="w-full min-h-[52px] mt-5 rounded-xl bg-ink hover:bg-black text-white font-bold text-[15px] flex items-center justify-center gap-2.5 shadow-md shadow-ink/25 transition-all duration-150 active:scale-[0.98] touch-manipulation">
+                class="w-full min-h-[52px] mt-6 rounded-xl bg-ink hover:bg-black text-white font-bold text-[15px] flex items-center justify-center gap-2.5 shadow-[0_4px_14px_rgba(13,13,20,.22)] transition-colors duration-150 active:scale-[0.98] touch-manipulation">
           <span id="btn-label">إرسال الرسالة</span>
           <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-none stroke-white flex-shrink-0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
         </button>
 
-        <p class="flex items-center justify-center gap-2 text-ink3 text-[11px] mt-4">
-          <svg viewBox="0 0 24 24" class="w-[14px] h-[14px] fill-ink3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <p class="flex items-center justify-center gap-2 text-ink2 text-[11px] font-medium mt-4">
+          <svg viewBox="0 0 24 24" class="w-[14px] h-[14px] fill-ink2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           بياناتك آمنة ولن تُشارك مع أي طرف
         </p>
       </div>
@@ -249,7 +333,7 @@
 
       <button id="bigPlayBtn" aria-label="تشغيل/إيقاف الفيديو" type="button" class="absolute inset-0 flex items-center justify-center group">
         <span class="w-16 h-16 rounded-full bg-white/12 backdrop-blur-md border border-white/25 flex items-center justify-center transition group-hover:bg-white/20 group-active:scale-90">
-          <svg id="bigPlayIcon" viewBox="0 0 24 24" class="w-[26px] h-[26px] fill-white"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="bigPlayIcon" viewBox="0 0 24 24" class="w-[26px] h-[26px] fill-[#FF3B3B]"><path d="M8 5v14l11-7z"/></svg>
           <svg id="bigPauseIcon" viewBox="0 0 24 24" class="w-[26px] h-[26px] fill-white hidden"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
         </span>
       </button>
@@ -258,7 +342,7 @@
         <input type="range" id="seekBar" value="0" min="0" max="100" step="0.1" class="mb-2">
         <div class="flex items-center gap-2.5">
           <button id="ctrlPlayBtn" type="button" class="text-white p-1" aria-label="play/pause">
-            <svg id="ctrlPlayIcon" viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-white"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="ctrlPlayIcon" viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-[#FF3B3B]"><path d="M8 5v14l11-7z"/></svg>
             <svg id="ctrlPauseIcon" viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-white hidden"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
           </button>
           <span class="text-white/80 text-[10.5px] font-semibold tabular-nums"><span id="curTime">0:00</span> / <span id="durTime">0:00</span></span>
@@ -283,23 +367,13 @@ const videoModal = document.getElementById('videoModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const vid = document.getElementById('introVideo');
 
-function openModal(){
-  videoModal.classList.remove('hidden');
-  videoModal.classList.add('flex');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(){
-  videoModal.classList.add('hidden');
-  videoModal.classList.remove('flex');
-  document.body.style.overflow = '';
-  vid.pause();
-}
+function openModal(){ videoModal.classList.remove('hidden'); videoModal.classList.add('flex'); document.body.style.overflow = 'hidden'; }
+function closeModal(){ videoModal.classList.add('hidden'); videoModal.classList.remove('flex'); document.body.style.overflow = ''; vid.pause(); }
 aboutBtn.addEventListener('click', openModal);
 closeModalBtn.addEventListener('click', closeModal);
 videoModal.addEventListener('click', (e) => { if(e.target === videoModal) closeModal(); });
 document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
 
-/* ── player controls ── */
 const bigPlayBtn  = document.getElementById('bigPlayBtn');
 const bigPlayIcon = document.getElementById('bigPlayIcon');
 const bigPauseIcon= document.getElementById('bigPauseIcon');
@@ -315,41 +389,17 @@ const muteIcon    = document.getElementById('muteIcon');
 const fsBtn       = document.getElementById('fsBtn');
 const videoWrap   = document.getElementById('videoWrap');
 
-function fmt(t){
-  if(!isFinite(t) || t < 0) return '0:00';
-  const m = Math.floor(t/60), s = Math.floor(t%60);
-  return m + ':' + String(s).padStart(2,'0');
-}
+function fmt(t){ if(!isFinite(t) || t < 0) return '0:00'; const m=Math.floor(t/60), s=Math.floor(t%60); return m+':'+String(s).padStart(2,'0'); }
 function togglePlay(){ vid.paused ? vid.play() : vid.pause(); }
 bigPlayBtn.addEventListener('click', togglePlay);
 ctrlPlayBtn.addEventListener('click', togglePlay);
-
-vid.addEventListener('play', () => {
-  bigPlayIcon.classList.add('hidden');  bigPauseIcon.classList.remove('hidden');
-  ctrlPlayIcon.classList.add('hidden'); ctrlPauseIcon.classList.remove('hidden');
-});
-vid.addEventListener('pause', () => {
-  bigPlayIcon.classList.remove('hidden');  bigPauseIcon.classList.add('hidden');
-  ctrlPlayIcon.classList.remove('hidden'); ctrlPauseIcon.classList.add('hidden');
-});
-vid.addEventListener('loadedmetadata', () => {
-  durTimeEl.textContent = fmt(vid.duration);
-  seekBar.max = vid.duration || 100;
-});
-vid.addEventListener('timeupdate', () => {
-  seekBar.value = vid.currentTime;
-  curTimeEl.textContent = fmt(vid.currentTime);
-});
+vid.addEventListener('play', () => { bigPlayIcon.classList.add('hidden'); bigPauseIcon.classList.remove('hidden'); ctrlPlayIcon.classList.add('hidden'); ctrlPauseIcon.classList.remove('hidden'); });
+vid.addEventListener('pause', () => { bigPlayIcon.classList.remove('hidden'); bigPauseIcon.classList.add('hidden'); ctrlPlayIcon.classList.remove('hidden'); ctrlPauseIcon.classList.add('hidden'); });
+vid.addEventListener('loadedmetadata', () => { durTimeEl.textContent = fmt(vid.duration); seekBar.max = vid.duration || 100; });
+vid.addEventListener('timeupdate', () => { seekBar.value = vid.currentTime; curTimeEl.textContent = fmt(vid.currentTime); });
 seekBar.addEventListener('input', () => { vid.currentTime = seekBar.value; });
-muteBtn.addEventListener('click', () => {
-  vid.muted = !vid.muted;
-  volIcon.classList.toggle('hidden', vid.muted);
-  muteIcon.classList.toggle('hidden', !vid.muted);
-});
-fsBtn.addEventListener('click', () => {
-  if(videoWrap.requestFullscreen) videoWrap.requestFullscreen();
-  else if(videoWrap.webkitRequestFullscreen) videoWrap.webkitRequestFullscreen();
-});
+muteBtn.addEventListener('click', () => { vid.muted = !vid.muted; volIcon.classList.toggle('hidden', vid.muted); muteIcon.classList.toggle('hidden', !vid.muted); });
+fsBtn.addEventListener('click', () => { if(videoWrap.requestFullscreen) videoWrap.requestFullscreen(); else if(videoWrap.webkitRequestFullscreen) videoWrap.webkitRequestFullscreen(); });
 
 /* ════════════════════ CONTACT METHOD DROPDOWN ════════════════════ */
 const mdBtn = document.getElementById('mdBtn');
@@ -364,22 +414,19 @@ const cbErr = document.getElementById('cbErr');
 
 const METHODS = {
   whatsapp: {
-    label: 'رقم هاتف الواتساب', placeholder: '+964 7XX XXX XXXX', type: 'tel', inputmode: 'tel',
-    color: '#25D366',
+    label: 'رقم هاتف الواتساب', placeholder: '+964 7XX XXX XXXX', type: 'tel', inputmode: 'tel', color: '#25D366',
     icon: '<svg viewBox="0 0 24 24" class="w-[18px] h-[18px]" fill="#25D366"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.84.5 3.65 1.45 5.24L2 22l4.97-1.55a9.8 9.8 0 0 0 5.07 1.4h.01c5.46 0 9.91-4.45 9.91-9.91A9.86 9.86 0 0 0 12.04 2m5.84 14.07c-.25.7-1.45 1.36-1.99 1.43-.51.07-1.16.1-1.87-.12-.43-.13-.98-.31-1.69-.61-2.97-1.28-4.9-4.27-5.05-4.47-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.59-.37.79-.37.2 0 .39 0 .56.01.18.01.42-.07.66.5.25.6.84 2.06.92 2.21.08.15.13.32.03.51-.45.94-.93 1.07-1.18 1.34-.13.14-.27.29-.12.55.55 1.04 1.27 1.97 2.22 2.73 1.01.81 1.91 1.16 2.31 1.32.2.08.43.07.59-.11.21-.24.46-.62.71-1 .18-.27.4-.31.66-.21.27.1 1.71.81 2 .96.3.15.5.22.57.35.07.13.07.74-.18 1.44z"/></svg>',
     label_html: '<span class="font-bold text-[14px]" style="color:#25D366">واتساب</span>',
     validate: v => /^[+\d][\d\s-]{7,}$/.test(v.trim())
   },
   telegram: {
-    label: 'اسم المستخدم أو رقم تلكرام', placeholder: '@username أو +964 7XX XXX XXXX', type: 'text', inputmode: 'text',
-    color: '#229ED9',
+    label: 'اسم المستخدم أو رقم تلكرام', placeholder: '@username أو +964 7XX XXX XXXX', type: 'text', inputmode: 'text', color: '#229ED9',
     icon: '<svg viewBox="0 0 24 24" class="w-[18px] h-[18px]" fill="#229ED9"><path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2m4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.13-.05-.18s-.16-.04-.23-.02c-.1.02-1.65 1.05-4.66 3.08-.44.3-.84.45-1.2.44-.39-.01-1.15-.23-1.7-.42-.69-.24-1.24-.37-1.19-.78.02-.21.31-.43.86-.65 3.39-1.48 5.65-2.45 6.79-2.93 3.23-1.35 3.9-1.59 4.34-1.59.1 0 .31.02.45.14.11.1.15.23.16.33-.01.06.01.24 0 .39z"/></svg>',
     label_html: '<span class="font-bold text-[14px]" style="color:#229ED9">تلكرام</span>',
     validate: v => v.trim().length > 2
   },
   email: {
-    label: 'البريد الإلكتروني', placeholder: 'email@example.com', type: 'email', inputmode: 'email',
-    color: '#111111',
+    label: 'البريد الإلكتروني', placeholder: 'email@example.com', type: 'email', inputmode: 'email', color: '#111111',
     icon: '<svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-none stroke-black" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
     label_html: '<span class="font-bold text-[14px] text-black">البريد الإلكتروني</span>',
     validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
@@ -388,8 +435,8 @@ const METHODS = {
 
 let currentMethod = null;
 
-function openMd(){ mdList.classList.remove('dd-closed'); mdList.classList.add('dd-open'); mdBtn.setAttribute('aria-expanded','true'); mdBtn.classList.add('dd-active'); mdChevron.style.transform='rotate(180deg)'; }
-function closeMd(){ mdList.classList.add('dd-closed'); mdList.classList.remove('dd-open'); mdBtn.setAttribute('aria-expanded','false'); mdBtn.classList.remove('dd-active'); mdChevron.style.transform='rotate(0deg)'; }
+function openMd(){ mdList.classList.remove('dd-closed'); mdList.classList.add('dd-open'); mdBtn.setAttribute('aria-expanded','true'); mdBtn.classList.add('dd-active'); }
+function closeMd(){ mdList.classList.add('dd-closed'); mdList.classList.remove('dd-open'); mdBtn.setAttribute('aria-expanded','false'); mdBtn.classList.remove('dd-active'); }
 mdBtn.addEventListener('click', (e) => { e.stopPropagation(); mdList.classList.contains('dd-open') ? closeMd() : openMd(); });
 
 mdList.querySelectorAll('.md-option').forEach(opt => {
@@ -407,7 +454,7 @@ mdList.querySelectorAll('.md-option').forEach(opt => {
     cbInput.placeholder = m.placeholder;
     cbInput.value = '';
     cbInput.style.borderColor = m.color + '55';
-    cbInput.dir = (m.type === 'email') ? 'ltr' : 'ltr';
+    cbInput.dir = 'ltr';
     cbErr.classList.add('hidden');
     contactBox.classList.remove('hidden');
 
@@ -415,14 +462,10 @@ mdList.querySelectorAll('.md-option').forEach(opt => {
   });
 });
 
-cbInput.addEventListener('focus', () => {
-  if(currentMethod){ cbInput.style.boxShadow = '0 0 0 4px ' + METHODS[currentMethod].color + '26'; }
-});
+cbInput.addEventListener('focus', () => { if(currentMethod){ cbInput.style.boxShadow = '0 0 0 4px ' + METHODS[currentMethod].color + '26'; } });
 cbInput.addEventListener('blur', () => { cbInput.style.boxShadow = 'none'; });
 
-document.addEventListener('click', (e) => {
-  if(!document.getElementById('methodDropdown').contains(e.target)) closeMd();
-});
+document.addEventListener('click', (e) => { if(!document.getElementById('methodDropdown').contains(e.target)) closeMd(); });
 
 /* ════════════════════ SERVICE DROPDOWN ════════════════════ */
 const ddBtn   = document.getElementById('ddBtn');
@@ -431,8 +474,8 @@ const ddLabel = document.getElementById('ddLabel');
 const ddChevron = document.getElementById('ddChevron');
 const serviceValue = document.getElementById('serviceValue');
 
-function openDropdown(){ ddList.classList.remove('dd-closed'); ddList.classList.add('dd-open'); ddBtn.setAttribute('aria-expanded','true'); ddBtn.classList.add('dd-active'); ddChevron.style.transform='rotate(180deg)'; }
-function closeDropdown(){ ddList.classList.add('dd-closed'); ddList.classList.remove('dd-open'); ddBtn.setAttribute('aria-expanded','false'); ddBtn.classList.remove('dd-active'); ddChevron.style.transform='rotate(0deg)'; }
+function openDropdown(){ ddList.classList.remove('dd-closed'); ddList.classList.add('dd-open'); ddBtn.setAttribute('aria-expanded','true'); ddBtn.classList.add('dd-active'); }
+function closeDropdown(){ ddList.classList.add('dd-closed'); ddList.classList.remove('dd-open'); ddBtn.setAttribute('aria-expanded','false'); ddBtn.classList.remove('dd-active'); }
 ddBtn.addEventListener('click', (e) => { e.stopPropagation(); ddList.classList.contains('dd-open') ? closeDropdown() : openDropdown(); });
 ddList.querySelectorAll('.dd-option').forEach(opt => {
   opt.addEventListener('click', () => {
@@ -443,18 +486,16 @@ ddList.querySelectorAll('.dd-option').forEach(opt => {
     closeDropdown();
   });
 });
-document.addEventListener('click', (e) => {
-  if(!document.getElementById('serviceDropdown').contains(e.target)) closeDropdown();
-});
+document.addEventListener('click', (e) => { if(!document.getElementById('serviceDropdown').contains(e.target)) closeDropdown(); });
 
-/* ════════════════════ CHAR COUNT (open-ended) ════════════════════ */
+/* ════════════════════ CHAR COUNT ════════════════════ */
 const msgEl = document.getElementById('f_msg');
 const charCount = document.getElementById('charCount');
 msgEl.addEventListener('input', () => { charCount.textContent = msgEl.value.length + ' حرف'; });
 
 /* ════════════════════ VALIDATION + SUBMIT ════════════════════ */
-const ACTION = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse";
-const F = { name:"entry.1001", method:"entry.1002", value:"entry.1003", service:"entry.1004", msg:"entry.1005" };
+const ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSfwt5HiKc8r3rXJiXL9mMm0Gm0J9ho4QIz_j-fpQ95K7ge6jQ/formResponse";
+const F = { name:"entry.774534661", contact:"entry.717590107", service:"entry.150638169", msg:"entry.1186313922" };
 
 function setError(inputId, grpId, hasError){
   const input = document.getElementById(inputId);
@@ -498,11 +539,11 @@ async function doSend(){
   btn.disabled = true; lbl.textContent = 'جاري الإرسال…';
 
   const methodNames = { whatsapp:'واتساب', telegram:'تلكرام', email:'البريد الإلكتروني' };
+  const combinedContact = (methodNames[currentMethod] || '') + ' - ' + cbInput.value.trim();
 
   const d = new FormData();
   d.append(F.name,    document.getElementById('f_name').value.trim());
-  d.append(F.method,  methodNames[currentMethod] || '');
-  d.append(F.value,   cbInput.value.trim());
+  d.append(F.contact, combinedContact);
   d.append(F.service, serviceValue.value);
   d.append(F.msg,     msgEl.value.trim());
 

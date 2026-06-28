@@ -120,16 +120,15 @@
   @media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
 </style>
 </head>
-<body class="bg-surf2 text-ink antialiased">
+<body class="bg-white text-ink antialiased">
 
-<div class="max-w-[960px] mx-auto p-3 sm:p-6">
+<!-- ══════════════════ HERO — full-width dark section ══════════════════ -->
+<header class="bg-ink relative overflow-hidden">
+  <div class="dr w-[340px] h-[340px] -top-[120px] -right-[120px] hidden md:block overflow-hidden"></div>
+  <div class="dr w-[220px] h-[220px] -bottom-20 -left-20 hidden md:block overflow-hidden"></div>
 
-  <div class="grid md:grid-cols-[368px_1fr] shadow-[0_18px_54px_rgba(0,0,0,.12)]">
+  <div class="max-w-2xl mx-auto px-5 sm:px-8 py-10 md:py-16 relative z-10">
 
-    <!-- ══ DARK PANEL ══ -->
-    <div class="bg-ink relative px-5 sm:px-7 md:px-9 py-7 md:py-12 flex flex-col rounded-t-3xl md:rounded-t-none md:rounded-r-3xl">
-      <div class="dr w-[340px] h-[340px] -top-[120px] -right-[120px] hidden md:block overflow-hidden"></div>
-      <div class="dr w-[220px] h-[220px] -bottom-20 -left-20 hidden md:block overflow-hidden"></div>
 
       <div class="relative z-10 flex items-center gap-3 mb-6 md:mb-9">
         <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-aurora flex items-center justify-center flex-shrink-0">
@@ -155,8 +154,8 @@
         <span>من نحن</span>
       </button>
 
-      <!-- trust signals — fill the panel's natural negative space with reassurance, not filler -->
-      <div class="relative z-10 hidden md:flex flex-col gap-3.5 mt-10">
+      <!-- trust signals — horizontal row now that we have full page width -->
+      <div class="relative z-10 flex flex-wrap gap-x-7 gap-y-3 mt-8 pt-8 border-t border-white/10">
         <div class="trust-row">
           <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
           <span class="text-white/55 text-[12px] font-semibold">رد سريع خلال 24 ساعة</span>
@@ -170,12 +169,12 @@
           <span class="text-white/55 text-[12px] font-semibold">بياناتك لا تُشارك مع أي طرف</span>
         </div>
       </div>
+  </div>
+</header>
 
-      <div class="relative z-10 text-white/20 text-[11px] mt-auto pt-8 hidden md:block">© 2026 Studio Aurora — جميع الحقوق محفوظة</div>
-    </div>
-
-    <!-- ══ WHITE FORM PANEL ══ -->
-    <div class="bg-white px-5 sm:px-7 md:px-10 py-7 md:py-12 rounded-b-3xl md:rounded-b-none md:rounded-l-3xl">
+<!-- ══════════════════ FORM — full-width white section ══════════════════ -->
+<main class="bg-white">
+  <div class="max-w-2xl mx-auto px-5 sm:px-8 py-10 md:py-16">
 
       <div id="form-area">
 
@@ -313,9 +312,15 @@
         <p class="text-ink3 text-[13px] max-w-[260px]">شكراً لتواصلك. سيرد فريقنا عليك خلال 24 ساعة عمل.</p>
       </div>
 
-    </div>
   </div>
-</div>
+</main>
+
+<!-- ══════════════════ FOOTER — full-width ══════════════════ -->
+<footer class="bg-surf2 border-t border-line">
+  <div class="max-w-2xl mx-auto px-5 sm:px-8 py-6 text-center">
+    <p class="text-ink3 text-[11px]">© 2026 Studio Aurora — جميع الحقوق محفوظة</p>
+  </div>
+</footer>
 
 <!-- ════════════════════ VIDEO MODAL ════════════════════ -->
 <div id="videoModal" class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm items-center justify-center p-4">
